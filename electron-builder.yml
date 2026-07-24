@@ -1,0 +1,30 @@
+appId: com.appsenhas.desktop
+productName: App Senhas
+# argon2 e koffi são N-API (ABI estável entre Node/Electron) — não precisam
+# ser recompilados por versão do Electron, e o rebuild via node-gyp falha de
+# qualquer forma neste caminho (contém espaço: "APP SENHAS").
+npmRebuild: false
+directories:
+  output: release
+  buildResources: resources
+files:
+  - out/**/*
+  - resources/**/*
+extraResources:
+  - from: resources
+    to: resources
+# koffi e argon2 usam bindings nativos que não carregam de dentro do app.asar
+asarUnpack:
+  - '**/node_modules/koffi/**/*'
+  - '**/node_modules/argon2/**/*'
+win:
+  target: nsis
+  icon: resources/icon.ico
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+publish:
+  provider: github
+  owner: nienowjux-hash
+  repo: password-vault

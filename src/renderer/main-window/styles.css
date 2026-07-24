@@ -1,0 +1,136 @@
+:root {
+  color-scheme: light dark;
+  --bg: #1e1f24;
+  --fg: #eaeaea;
+  --card: #2a2b32;
+  --accent: #5b8def;
+  --danger: #e5484d;
+  --border: #3a3b42;
+  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+#app { padding: 16px; }
+
+.view.hidden { display: none; }
+
+h1 { font-size: 18px; margin: 0 0 12px; }
+h2 { font-size: 16px; }
+
+.hint { font-size: 13px; opacity: 0.75; }
+
+form { display: flex; flex-direction: column; gap: 10px; }
+
+label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+
+input, textarea {
+  background: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 14px;
+}
+
+button {
+  background: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+button.primary, button[type='submit'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0b0b0c;
+  font-weight: 600;
+}
+
+button:hover { filter: brightness(1.1); }
+
+.error { color: var(--danger); font-size: 13px; min-height: 16px; }
+
+.toolbar { display: flex; align-items: center; justify-content: space-between; }
+.toolbar-actions { display: flex; gap: 8px; }
+
+.folder-tabs {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.folder-tab {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+}
+
+.folder-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0b0b0c;
+  font-weight: 600;
+}
+
+#credential-list { list-style: none; padding: 0; margin: 12px 0; display: flex; flex-direction: column; gap: 8px; }
+
+.credential-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.credential-info .name { font-weight: 600; }
+.credential-info .username { font-size: 12px; opacity: 0.7; }
+.credential-info .category-badge {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  opacity: 0.8;
+}
+
+.credential-actions { display: flex; gap: 6px; }
+.credential-actions button { padding: 4px 8px; font-size: 12px; }
+
+dialog {
+  background: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  max-width: 360px;
+  width: 90%;
+}
+
+dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
+
+.dialog-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+code#revealed-password {
+  display: block;
+  padding: 10px;
+  background: #111;
+  border-radius: 6px;
+  word-break: break-all;
+  user-select: all;
+}

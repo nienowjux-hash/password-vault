@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'" />
+    <title>App Senhas</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main id="app">
+      <section id="view-loading" class="view">
+        <p>Carregando…</p>
+      </section>
+
+      <section id="view-create" class="view hidden">
+        <h1>Criar cofre</h1>
+        <p class="hint">Escolha um PIN (ou senha) para proteger seu cofre. Quanto mais longo, melhor.</p>
+        <form id="form-create">
+          <label>PIN <input type="password" id="create-pin" minlength="4" required autocomplete="new-password" /></label>
+          <label>Confirme o PIN <input type="password" id="create-pin-confirm" minlength="4" required autocomplete="new-password" /></label>
+          <p id="create-error" class="error"></p>
+          <button type="submit">Criar cofre</button>
+        </form>
+      </section>
+
+      <section id="view-unlock" class="view hidden">
+        <h1>Cofre bloqueado</h1>
+        <form id="form-unlock">
+          <label>PIN <input type="password" id="unlock-pin" required autocomplete="current-password" /></label>
+          <p id="unlock-error" class="error"></p>
+          <button type="submit">Desbloquear</button>
+        </form>
+      </section>
+
+      <section id="view-vault" class="view hidden">
+        <header class="toolbar">
+          <h1>Minhas senhas</h1>
+          <div class="toolbar-actions">
+            <button id="btn-settings" title="Configurações">⚙</button>
+            <button id="btn-lock" title="Bloquear">Bloquear</button>
+          </div>
+        </header>
+
+        <ul id="folder-tabs" class="folder-tabs"></ul>
+
+        <ul id="credential-list"></ul>
+
+        <button id="btn-add" class="primary">+ Adicionar credencial</button>
+
+        <dialog id="dialog-form">
+          <form id="form-credential">
+            <input type="hidden" id="cred-id" />
+            <label>Nome <input type="text" id="cred-name" required /></label>
+            <label>Usuário <input type="text" id="cred-username" /></label>
+            <label>Senha <input type="password" id="cred-password" /></label>
+            <label>Pasta
+              <input type="text" id="cred-category" list="cred-category-options" placeholder="Ex.: Pessoal, Trabalho" />
+              <datalist id="cred-category-options"></datalist>
+            </label>
+            <label>Notas <textarea id="cred-notes"></textarea></label>
+            <div class="dialog-actions">
+              <button type="button" id="btn-cancel-form">Cancelar</button>
+              <button type="submit">Salvar</button>
+            </div>
+          </form>
+        </dialog>
+
+        <dialog id="dialog-pin-confirm">
+          <form id="form-pin-confirm">
+            <p id="pin-confirm-label">Digite o PIN para revelar a senha</p>
+            <input type="password" id="pin-confirm-input" required autocomplete="current-password" />
+            <p id="pin-confirm-error" class="error"></p>
+            <div class="dialog-actions">
+              <button type="button" id="btn-cancel-pin-confirm">Cancelar</button>
+              <button type="submit">Confirmar</button>
+            </div>
+          </form>
+        </dialog>
+
+        <dialog id="dialog-reveal">
+          <p>Senha:</p>
+          <code id="revealed-password"></code>
+          <div class="dialog-actions">
+            <button id="btn-copy-revealed">Copiar</button>
+            <button id="btn-close-reveal">Fechar</button>
+          </div>
+        </dialog>
+
+        <dialog id="dialog-settings">
+          <form id="form-settings">
+            <h2>Configurações</h2>
+            <label>Atalho global <input type="text" id="settings-hotkey" /></label>
+            <label>Bloqueio automático (minutos) <input type="number" id="settings-autolock" min="1" max="120" /></label>
+            <label><input type="checkbox" id="settings-openatlogin" /> Iniciar com o Windows</label>
+            <label><input type="checkbox" id="settings-clipboard" /> Modo compatibilidade (colar via área de transferência)</label>
+            <div class="dialog-actions">
+              <button type="button" id="btn-close-settings">Fechar</button>
+              <button type="submit">Salvar</button>
+            </div>
+          </form>
+        </dialog>
+      </section>
+    </main>
+    <script type="module" src="./index.ts"></script>
+  </body>
+</html>
