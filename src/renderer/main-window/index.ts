@@ -86,7 +86,13 @@ function describeError(error: { message: string; code: string; retryAfterMs?: nu
 
 const UNCATEGORIZED = 'Sem pasta';
 let activeFolder = 'all';
+let searchQuery = '';
 let allCredentials: CredentialMeta[] = [];
+
+$<HTMLInputElement>('credential-search').addEventListener('input', (e) => {
+  searchQuery = (e.target as HTMLInputElement).value;
+  renderCredentialItems();
+});
 
 function folderOf(cred: CredentialMeta): string {
   return cred.category.trim() || UNCATEGORIZED;
@@ -127,8 +133,24 @@ function renderFolderTabs(): void {
 
 function renderCredentialItems(): void {
   const list = $<HTMLUListElement>('credential-list');
-  const visible = activeFolder === 'all' ? allCredentials : allCredentials.filter((c) => folderOf(c) === activeFolder);
+  let visible = activeFolder === 'all' ? allCredentials : allCredentials.filter((c) => folderOf(c) === activeFolder);
+
+  const query = searchQuery.trim().toLowerCase();
+  if (query) {
+    visible = visible.filter(
+      (c) => c.name.toLowerCase().includes(query) || c.username.toLowerCase().includes(query)
+    );
+  }
+
   list.innerHTML = '';
+
+  if (visible.length === 0) {
+    const empty = document.createElement('li');
+    empty.className = 'empty-state';
+    empty.textContent = query ? 'Nenhuma credencial encontrada.' : 'Nenhuma credencial nesta pasta.';
+    list.appendChild(empty);
+    return;
+  }
 
   for (const cred of visible) {
     const li = document.createElement('li');
