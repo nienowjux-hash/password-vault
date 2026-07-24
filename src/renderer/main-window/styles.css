@@ -84,6 +84,19 @@ button:hover { filter: brightness(1.1); }
   font-weight: 600;
 }
 
+.folder-tab-item {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.folder-tab-action {
+  padding: 4px 6px;
+  font-size: 11px;
+  border-radius: 999px;
+  line-height: 1;
+}
+
 .credential-search {
   display: block;
   width: 100%;

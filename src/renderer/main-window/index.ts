@@ -105,13 +105,19 @@ function renderFolderTabs(): void {
   if (activeFolder !== 'all' && !folders.includes(activeFolder)) activeFolder = 'all';
 
   tabs.innerHTML = '';
-  const entries: Array<{ key: string; label: string }> = [
-    { key: 'all', label: `Todas (${allCredentials.length})` },
-    ...folders.map((f) => ({ key: f, label: `${f} (${allCredentials.filter((c) => folderOf(c) === f).length})` })),
+  const entries: Array<{ key: string; label: string; editable: boolean }> = [
+    { key: 'all', label: `Todas (${allCredentials.length})`, editable: false },
+    ...folders.map((f) => ({
+      key: f,
+      label: `${f} (${allCredentials.filter((c) => folderOf(c) === f).length})`,
+      editable: f !== UNCATEGORIZED,
+    })),
   ];
 
   for (const entry of entries) {
     const li = document.createElement('li');
+    li.className = 'folder-tab-item';
+
     const btn = document.createElement('button');
     btn.textContent = entry.label;
     btn.className = entry.key === activeFolder ? 'folder-tab active' : 'folder-tab';
@@ -121,6 +127,29 @@ function renderFolderTabs(): void {
       renderCredentialItems();
     });
     li.appendChild(btn);
+
+    if (entry.editable) {
+      const renameBtn = document.createElement('button');
+      renameBtn.className = 'folder-tab-action';
+      renameBtn.title = 'Renomear pasta';
+      renameBtn.textContent = '✎';
+      renameBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        renameFolder(entry.key);
+      });
+      li.appendChild(renameBtn);
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'folder-tab-action';
+      deleteBtn.title = 'Excluir pasta';
+      deleteBtn.textContent = '🗑';
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        deleteFolder(entry.key);
+      });
+      li.appendChild(deleteBtn);
+    }
+
     tabs.appendChild(li);
   }
 
@@ -129,6 +158,34 @@ function renderFolderTabs(): void {
     .filter((f) => f !== UNCATEGORIZED)
     .map((f) => `<option value="${escapeHtml(f)}"></option>`)
     .join('');
+}
+
+async function renameFolder(oldName: string): Promise<void> {
+  const input = prompt(`Renomear pasta "${oldName}" para:`, oldName);
+  if (input === null) return;
+  const newName = input.trim();
+  if (!newName || newName === oldName) return;
+
+  const targets = allCredentials.filter((c) => folderOf(c) === oldName);
+  for (const cred of targets) {
+    await api.credentialUpdate({ id: cred.id, category: newName });
+  }
+  if (activeFolder === oldName) activeFolder = newName;
+  await renderCredentialList();
+}
+
+async function deleteFolder(name: string): Promise<void> {
+  const targets = allCredentials.filter((c) => folderOf(c) === name);
+  const confirmed = confirm(
+    `Excluir a pasta "${name}"? ${targets.length} credencial(is) nela serão movidas para "${UNCATEGORIZED}" (elas não serão excluídas).`
+  );
+  if (!confirmed) return;
+
+  for (const cred of targets) {
+    await api.credentialUpdate({ id: cred.id, category: '' });
+  }
+  if (activeFolder === name) activeFolder = 'all';
+  await renderCredentialList();
 }
 
 function renderCredentialItems(): void {
