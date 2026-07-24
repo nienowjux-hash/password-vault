@@ -160,11 +160,30 @@ function renderFolderTabs(): void {
     .join('');
 }
 
-async function renameFolder(oldName: string): Promise<void> {
-  const input = prompt(`Renomear pasta "${oldName}" para:`, oldName);
-  if (input === null) return;
-  const newName = input.trim();
-  if (!newName || newName === oldName) return;
+const dialogRenameFolder = $<HTMLDialogElement>('dialog-rename-folder');
+let folderBeingRenamed: string | null = null;
+
+function renameFolder(oldName: string): void {
+  folderBeingRenamed = oldName;
+  const input = $<HTMLInputElement>('rename-folder-input');
+  input.value = oldName;
+  dialogRenameFolder.showModal();
+  input.focus();
+  input.select();
+}
+
+$('btn-cancel-rename-folder').addEventListener('click', () => {
+  folderBeingRenamed = null;
+  dialogRenameFolder.close();
+});
+
+$('form-rename-folder').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const oldName = folderBeingRenamed;
+  const newName = $<HTMLInputElement>('rename-folder-input').value.trim();
+  dialogRenameFolder.close();
+  folderBeingRenamed = null;
+  if (!oldName || !newName || newName === oldName) return;
 
   const targets = allCredentials.filter((c) => folderOf(c) === oldName);
   for (const cred of targets) {
@@ -172,7 +191,7 @@ async function renameFolder(oldName: string): Promise<void> {
   }
   if (activeFolder === oldName) activeFolder = newName;
   await renderCredentialList();
-}
+});
 
 async function deleteFolder(name: string): Promise<void> {
   const targets = allCredentials.filter((c) => folderOf(c) === name);

@@ -49,6 +49,16 @@
 
         <button id="btn-add" class="primary">+ Adicionar credencial</button>
 
+        <dialog id="dialog-rename-folder">
+          <form id="form-rename-folder">
+            <label>Novo nome da pasta <input type="text" id="rename-folder-input" required /></label>
+            <div class="dialog-actions">
+              <button type="button" id="btn-cancel-rename-folder">Cancelar</button>
+              <button type="submit">Salvar</button>
+            </div>
+          </form>
+        </dialog>
+
         <dialog id="dialog-form">
           <form id="form-credential">
             <input type="hidden" id="cred-id" />
