@@ -44,3 +44,88 @@ button[type='submit'] {
 .error { color: #e5484d; font-size: 12px; min-height: 14px; margin: 0; }
 
 .actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+.folder-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.folder-chip {
+  background: #2a2b32;
+  color: #c5c6cd;
+  border: 1px solid #3a3b42;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.folder-chip:hover {
+  background: #34353d;
+}
+
+.folder-chip.active {
+  background: #5b8def;
+  border-color: #5b8def;
+  color: #0b0b0c;
+  font-weight: 600;
+}
+
+.credential-listbox {
+  max-height: 190px;
+  overflow-y: auto;
+  border: 1px solid #3a3b42;
+  border-radius: 6px;
+  background: #2a2b32;
+}
+
+.credential-group-header {
+  position: sticky;
+  top: 0;
+  padding: 6px 10px 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8a8b93;
+  background: #2a2b32;
+}
+
+.credential-option {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 7px 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.credential-option:hover {
+  background: #34353d;
+}
+
+.credential-option.selected {
+  background: #33395a;
+}
+
+.credential-option .cred-name {
+  color: #eaeaea;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.credential-option .cred-username {
+  color: #9a9ba3;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.credential-listbox .empty-state {
+  padding: 10px;
+  font-size: 12px;
+  color: #9a9ba3;
+}

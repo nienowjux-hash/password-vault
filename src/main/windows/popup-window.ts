@@ -17,10 +17,10 @@ export function createOrShowPopupWindow(): BrowserWindow {
   const { width } = screen.getPrimaryDisplay().workAreaSize;
 
   popupWindow = new BrowserWindow({
-    width: 360,
-    height: 220,
-    x: Math.round((width - 360) / 2),
-    y: 120,
+    width: 380,
+    height: 440,
+    x: Math.round((width - 380) / 2),
+    y: 90,
     frame: false,
     resizable: false,
     alwaysOnTop: true,

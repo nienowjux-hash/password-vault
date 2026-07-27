@@ -9,10 +9,18 @@
   <body>
     <form id="form-autotype">
       <label>Credencial
-        <select id="select-credential"></select>
+        <input
+          type="text"
+          id="search-credential"
+          placeholder="Buscar por nome ou usuário..."
+          autocomplete="off"
+          autofocus
+        />
       </label>
+      <div id="folder-chips" class="folder-chips"></div>
+      <div id="credential-list" class="credential-listbox" role="listbox" tabindex="-1"></div>
       <label>PIN
-        <input type="password" id="input-pin" autocomplete="current-password" autofocus />
+        <input type="password" id="input-pin" autocomplete="current-password" />
       </label>
       <p id="error" class="error"></p>
       <div class="actions">
