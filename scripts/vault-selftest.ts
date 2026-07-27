@@ -16,6 +16,7 @@ async function main() {
         password: 'S3nh@ super secreta!',
         notes: '',
         category: '',
+        twoStepLogin: false,
         createdAt: Date.now(),
         updatedAt: Date.now(),
       },

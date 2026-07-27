@@ -4,6 +4,7 @@ export interface CredentialMeta {
   username: string;
   notes: string;
   category: string;
+  twoStepLogin: boolean;
   createdAt: number;
   updatedAt: number;
 }

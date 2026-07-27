@@ -287,6 +287,7 @@ $('btn-add').addEventListener('click', () => {
   $<HTMLInputElement>('cred-password').value = '';
   $<HTMLInputElement>('cred-category').value = activeFolder !== 'all' && activeFolder !== UNCATEGORIZED ? activeFolder : '';
   $<HTMLTextAreaElement>('cred-notes').value = '';
+  $<HTMLInputElement>('cred-two-step').checked = false;
   dialogForm.showModal();
 });
 
@@ -297,6 +298,7 @@ function openEditDialog(cred: CredentialMeta): void {
   $<HTMLInputElement>('cred-password').value = '';
   $<HTMLInputElement>('cred-category').value = cred.category;
   $<HTMLTextAreaElement>('cred-notes').value = cred.notes;
+  $<HTMLInputElement>('cred-two-step').checked = cred.twoStepLogin;
   dialogForm.showModal();
 }
 
@@ -310,13 +312,14 @@ $('form-credential').addEventListener('submit', async (e) => {
   const password = $<HTMLInputElement>('cred-password').value;
   const category = $<HTMLInputElement>('cred-category').value.trim();
   const notes = $<HTMLTextAreaElement>('cred-notes').value;
+  const twoStepLogin = $<HTMLInputElement>('cred-two-step').checked;
 
   if (id) {
-    const patch: Record<string, unknown> = { id, name, username, notes, category };
+    const patch: Record<string, unknown> = { id, name, username, notes, category, twoStepLogin };
     if (password) patch.password = password;
     await api.credentialUpdate(patch as any);
   } else {
-    await api.credentialAdd({ name, username, password, notes, category });
+    await api.credentialAdd({ name, username, password, notes, category, twoStepLogin });
   }
 
   dialogForm.close();

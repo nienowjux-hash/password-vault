@@ -13,6 +13,7 @@ const newCredentialSchema = z.object({
   password: z.string().max(2000),
   notes: z.string().max(4000),
   category: z.string().max(100).default(''),
+  twoStepLogin: z.boolean().default(false),
 });
 const updateCredentialSchema = newCredentialSchema.partial().extend({ id: z.string().uuid() });
 
@@ -98,9 +99,13 @@ export function registerVaultHandlers(): void {
     const { id, pin } = z.object({ id: z.string().uuid(), pin: pinSchema }).parse(raw);
     try {
       const password = await vault.verifyPinAndRevealPassword(pin, id);
-      const username = vault.listCredentials().find((c) => c.id === id)?.username ?? '';
+      const credential = vault.listCredentials().find((c) => c.id === id);
       closePopupWindow();
-      await autotypeIntoCapturedWindow({ username, password });
+      await autotypeIntoCapturedWindow({
+        username: credential?.username ?? '',
+        password,
+        twoStepLogin: credential?.twoStepLogin ?? false,
+      });
       return { ok: true as const };
     } catch (err) {
       return { ok: false as const, error: toErrorPayload(err) };

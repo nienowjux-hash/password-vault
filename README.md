@@ -12,6 +12,8 @@ Ao pressionar o atalho global, abre um popup com:
 
 Depois de selecionar a credencial e digitar o PIN, o usuário e a senha são digitados automaticamente na janela que estava em foco antes do atalho.
 
+Para sites com login em duas etapas (usuário numa página, senha só na página seguinte — ex.: contas Microsoft), marque "Login em duas etapas" no cadastro da credencial: o app digita o usuário, aperta Enter, espera a próxima página carregar e só então digita a senha (sem Tab, já que essas páginas geralmente já abrem com o campo de senha focado).
+
 ## Instalação
 
 Abra o PowerShell e rode:

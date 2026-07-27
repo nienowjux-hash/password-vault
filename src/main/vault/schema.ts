@@ -7,6 +7,7 @@ export const credentialSchema = z.object({
   password: z.string().max(2000),
   notes: z.string().max(4000),
   category: z.string().max(100).default(''),
+  twoStepLogin: z.boolean().default(false),
   createdAt: z.number(),
   updatedAt: z.number(),
 });

@@ -1,5 +1,13 @@
 import { clipboard } from 'electron';
-import { getForegroundWindow, restoreForegroundWindow, typeUnicodeText, pressVirtualKey, VK_TAB, type WindowHandle } from './win32';
+import {
+  getForegroundWindow,
+  restoreForegroundWindow,
+  typeUnicodeText,
+  pressVirtualKey,
+  VK_TAB,
+  VK_RETURN,
+  type WindowHandle,
+} from './win32';
 import { getSettings } from '../config';
 
 let capturedWindow: WindowHandle | null = null;
@@ -11,17 +19,27 @@ export function captureForegroundWindow(): void {
 
 const CLIPBOARD_CLEAR_DELAY_MS = 10_000;
 
+// Tempo de espera após o Enter em logins de duas etapas (ex.: Microsoft), para a
+// próxima página carregar e o campo de senha ganhar foco antes de digitarmos nela.
+const TWO_STEP_WAIT_MS = 1200;
+
 export interface AutotypePayload {
   username: string;
   password: string;
+  /** Ex.: login Microsoft — usuário numa página, senha só aparece na página seguinte. */
+  twoStepLogin?: boolean;
 }
 
 /**
  * Restaura o foco para a janela capturada e digita usuário + Tab + senha nela
  * (sequência padrão de autotype, como no KeePass). Se não houver usuário
  * cadastrado, digita só a senha, sem o Tab.
+ *
+ * Quando `twoStepLogin` é true, usa Enter em vez de Tab após o usuário e espera
+ * a próxima página carregar antes de digitar a senha (sem Tab, pois o campo de
+ * senha normalmente já vem focado nessas páginas).
  */
-export async function autotypeIntoCapturedWindow({ username, password }: AutotypePayload): Promise<void> {
+export async function autotypeIntoCapturedWindow({ username, password, twoStepLogin }: AutotypePayload): Promise<void> {
   if (!capturedWindow) throw new Error('Nenhuma janela capturada para autopreenchimento');
 
   restoreForegroundWindow(capturedWindow);
@@ -38,7 +56,12 @@ export async function autotypeIntoCapturedWindow({ username, password }: Autotyp
 
   if (username) {
     await typeUnicodeText(username);
-    await pressVirtualKey(VK_TAB);
+    if (twoStepLogin) {
+      await pressVirtualKey(VK_RETURN);
+      await new Promise((resolve) => setTimeout(resolve, TWO_STEP_WAIT_MS));
+    } else {
+      await pressVirtualKey(VK_TAB);
+    }
   }
 
   await typeUnicodeText(password);

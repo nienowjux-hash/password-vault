@@ -105,6 +105,7 @@ export async function typeUnicodeText(text: string, delayMs = 6): Promise<void> 
 }
 
 export const VK_TAB = 0x09;
+export const VK_RETURN = 0x0d;
 
 // Tecla virtual "de verdade" (não KEYEVENTF_UNICODE): necessário para Tab, já que
 // muitos apps/formulários só reagem a um keydown de VK_TAB para mudar de campo,
